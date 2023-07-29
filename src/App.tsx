@@ -25,4 +25,4 @@ mapComponents.set('timer', <Timer timeZone={timeZone}></Timer>);
 }
 
 export default App;
-
+// some text added for test
