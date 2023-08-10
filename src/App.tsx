@@ -10,7 +10,7 @@ const App: React.FC = () => {
   return <BrowserRouter>
   <Navigator items={ROUTES}/>
   {flNavigate && <Navigate to={COURSES_PATH}></Navigate> }{/* if it was not exist /*}
-  {/* // we were staying on the same page despite refreshing the browser ! */}
+  {/* we were staying on the same page despite refreshing the browser ! */}
     <Routes>
       {getRoutes()}
     </Routes>
