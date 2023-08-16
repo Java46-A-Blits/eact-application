@@ -11,11 +11,11 @@ const StatisticCost: React.FC = () =>
     // of all the courses. 
     const statObj = getMaxMinAvgByField (coursesService.get(),'cost');
     return <div>{statObj.min == 0 ? <label style={{fontSize: "2em"}}>No Data</label> :
-    <div style={{ fontSize: "1.5em", display: 'flex', justifyContent: 'space-evenly' }}>
-    <label>min cost = {statObj.min}</label>
-    <label>max cost = {statObj.max}</label>
-    <label>avg cost = {statObj.avg}</label>
-</div>}
-</div>
+     <div style={{ fontSize: "1.5em", display: 'flex', justifyContent: 'space-evenly' }}>
+      <label>min cost = {statObj.min}</label>
+      <label>max cost = {statObj.max}</label>
+      <label>avg cost = {statObj.avg}</label>
+     </div>}
+    </div>
 }
 export default StatisticCost;

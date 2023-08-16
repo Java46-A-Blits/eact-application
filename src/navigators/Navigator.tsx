@@ -8,7 +8,7 @@ function getLinks(): React.ReactNode {
 }
 
     return <nav style={{display: 'flex', justifyContent: "space-evenly", fontSize:'1.5em'}}>
-        {getLinks()};
+        {getLinks()}
     </nav>
 }  
 export default Navigator;  
