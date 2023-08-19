@@ -1,21 +1,20 @@
-import { error } from "console";
-import { courses } from "../config/service-config";
 import { Course } from "../models/Course";
 import { getRandomNumber } from "../util/random";
 import CourcesService from "./CourcesService";
 
 export default class CoursesServiceArray implements CourcesService{
+    courses: Course[] = [];
     add(course: Course): void {
         const id = getRandomNumber(100000, 999000);
         course.id = id;
-        courses.push(course);
+        this.courses.push(course);
     }
     remove(id: number): void {
         const index = this.getIndex(id);
-        courses.splice(index,1);
+        this.courses.splice(index,1);
     }
     getIndex(id: number): number {
-        const index = courses.findIndex(c => c.id === id);
+        const index = this.courses.findIndex(c => c.id === id);
         if (index < 0 ){
             throw `course with ${id} doesn't exist`
         }
@@ -26,10 +25,10 @@ export default class CoursesServiceArray implements CourcesService{
         if (course.id !== id){
             throw `id ${id} doesn't match the course id ${course.id}`
         }
-        courses[index] = course;
+        this.courses[index] = course;
     }
     get(): Course[] {
-        return courses;
+        return this.courses.slice();
     }
     
 }
