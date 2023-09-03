@@ -44,15 +44,14 @@ export function useImitator(){
             if (courses.length !== 0){
                 const index = getRandomNumber(0, courses.length - 1);
                 const course = getRandomCourse(courseData);
-                course.id = courses[index].id; // the replaced couse id has to equal the new (generated 'course') id
-                dispatch(updateCourse(course))
+                course.id = courses[index].id; //to be replaced course id has to equal the new
+                // (generated 'course') id
+                dispatch(updateCourse(course));
                 console.log(`updated course with ID : ${courses[index].id}`)
-
             }            
         }
     }    
 }
-
 // function getAction(number: any): ImitatorAction {
 //     for (let i = 0; i < imitatorActions.length; i++) {
 //         if (number < imitatorActions[i].prob) {
@@ -63,6 +62,5 @@ export function useImitator(){
 // }
 function getAction(num: number): ImitatorAction {
     return imitatorActions.find(ia => num <= ia.prob) ?? imitatorActions[imitatorActions.length -1];
-  
 }
 

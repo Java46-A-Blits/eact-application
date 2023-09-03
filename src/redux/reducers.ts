@@ -4,7 +4,8 @@ import { Course } from "../models/Course"
 import { ADD_COURSE_ACTION, REMOVE_COURSE_ACTION, UPDATE_COURSE_ACTION } from "./actions"
 import { coursesService } from "../config/service-config"
 
-const init: Course[] = coursesService.get(); // instead doing "courses  = []" inside coursesReducer to keep same initial state//
+const init: Course[] = coursesService.get(); // instead doing "courses  = []" 
+//inside coursesReducer to keep the same initial state//
 export const coursesReducer: Reducer<Course[], PayloadAction<Course | number>> =
  (courses = init, action): Course[] => {
      switch(action.type) {

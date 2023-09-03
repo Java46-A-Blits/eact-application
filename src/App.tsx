@@ -11,9 +11,10 @@ const App: React.FC = () => {
   const[flNavigate, setFlNavigate] = React.useState<boolean>(true);
   React.useEffect(() => setFlNavigate(false),[]);
   return <BrowserRouter>
-  <Navigator items={ROUTES}/>
-  {flNavigate && <Navigate to={COURSES_PATH}></Navigate> }{/* if it was not exist /*}
-  {/* we were staying on the same page despite refreshing the browser ! */}
+  {flNavigate && <Navigate to={COURSES_PATH}></Navigate> }{/* if it was not existing/*}
+  {/* we then were staying on the courses page even if refreshing the browser ! */}
+    <Navigator items={ROUTES}/>
+
     <Routes>
       {getRoutes()}
     </Routes>
