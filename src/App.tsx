@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { COURSES_PATH, ROUTES } from './config/routes-config';
 import { defaultMethod } from 'react-router-dom/dist/dom';
-import Navigator from './navigators/Navigator';
+import Navigator from './components/navigators/Navigator';
 import { useImitator } from './util/useImitator';
 
 const App: React.FC = () => {

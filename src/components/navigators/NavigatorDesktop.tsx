@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Tab, Tabs } from "@mui/material";
-import { RouteType } from "../models/RouteType";
+import { RouteType } from "../../models/RouteType";
 import { Link as RouterLink} from "react-router-dom";
 
 const NavigatorDesktop: React.FC<{items: RouteType[]}> = ({items}) => {
