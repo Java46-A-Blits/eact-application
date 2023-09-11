@@ -8,9 +8,9 @@ import StatisticsCost from "../components/pages/StatisticCost";
 import { RouteType } from "../models/RouteType";
 
 export const COURSES_PATH = '/';
-export const ADD_COURSE_PATH = 'course/add';
-export const STATISTIC_HOURS_PATH = 'statistic/hours';
-export const STATISTIC_COST_PATH = 'statistic/cost';
+export const ADD_COURSE_PATH = '/course/add';
+export const STATISTIC_HOURS_PATH = '/statistic/hours';
+export const STATISTIC_COST_PATH = '/statistic/cost';
 export const LOGIN_PATH = '/login';
 export const LOGOUT_PATH = '/logout';
 export const GENERATION_PATH = '/generation';
