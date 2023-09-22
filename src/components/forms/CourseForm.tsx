@@ -15,6 +15,8 @@ const CourseForm: React.FC<Props> = ({submitFn}) => {
         event.preventDefault();
         console.log(course);
         submitFn(course);
+        document.querySelector('form')!.reset(); // to reset all the fields after 'submit'
+        // '!' - means to assure form is an HTML elementm '?' means may form may be NULL? 
     }
     function handlerCourse(event: any): void {
         const courseCopy = {...course};
@@ -42,9 +44,12 @@ const CourseForm: React.FC<Props> = ({submitFn}) => {
         courseCopy.openingDate = new Date(event.target.value);     // *****
         setCourse(courseCopy);
     }
+    function onReset() {
+        setCourse(initialCourse);
+    }
 
-return <form onSubmit={onSubmit}> 
-    <Grid container spacing={{xs:5, sm: 2, md: 8}} justifyContent={"center"}>
+return <form onSubmit={onSubmit} onReset={onReset}>  {/* added 'onReset' to resolve a bug */}
+     <Grid container spacing={{xs:5, sm: 2, md: 8}} justifyContent={"center"}>
         <Grid item xs={10} sm={5} >
             <FormControl fullWidth required >
                 <InputLabel id='course-select-label' > Course Name </InputLabel>
