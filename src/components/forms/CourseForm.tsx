@@ -16,7 +16,7 @@ const CourseForm: React.FC<Props> = ({submitFn}) => {
         console.log(course);
         submitFn(course);
         document.querySelector('form')!.reset(); // to reset all the fields after 'submit'
-        // '!' - means to assure form is an HTML elementm '?' means may form may be NULL? 
+        // '!' - means to assure form is an HTML element, '?' means may form may be NULL 
     }
     function handlerCourse(event: any): void {
         const courseCopy = {...course};
@@ -35,7 +35,7 @@ const CourseForm: React.FC<Props> = ({submitFn}) => {
     }
     function handlerCost(event: any): void{
         const courseCopy = {...course};
-        courseCopy.cost = event.target.value;
+        courseCopy.cost = +event.target.value;
         setCourse(courseCopy);
     }
  
