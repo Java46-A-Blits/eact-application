@@ -4,7 +4,7 @@ import { StateType } from "../../redux/store";
 import { Course } from "../../models/Course";
 import { GridColDef, DataGrid, GridRowParams, GridActionsCellItem, } from '@mui/x-data-grid'
 import { Box, Paper } from "@mui/material";
-import { removeCourse } from "../../redux/actions";
+import { removeCourse, updateCourse } from "../../redux/actions";
 import { Delete, Edit } from "@mui/icons-material";
 import CourseForm from "../forms/CourseForm";
 
@@ -23,6 +23,8 @@ const Courses: React.FC = () => {
     const dispatch = useDispatch();
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const [isEdit, setEdit] = React.useState(false);
+    const updatedCourse = React.useRef<Course>();
+
     function actionsFn(params: GridRowParams): JSX.Element[]{
         const actionElements: JSX.Element[] = [
             <GridActionsCellItem label="Remove" onClick={() => dispatch(removeCourse(params.id as number))}icon={<Delete/>}/>,
@@ -31,15 +33,17 @@ const Courses: React.FC = () => {
         return actionElements
     }
     function editFn(id: number){
-        // TODO
-        // SETS A CONDITIONAL RENDERING FLAG, UNMOUNTING DATAGRID AND MOUNTINTING COURSEFORM FOR THE COURSE TO BE UPDATED
+        updatedCourse.current = courses.find(c => c.id === id);
         setEdit(true);        
     }
     const getActionsCallback = useCallback(getAActions, [courses]);
     const columns = getActionsCallback(actionsFn);
     return <Box sx = {{display: 'flex', justifyContent: 'center'}} >
             <Paper sx={{ height: {xs: '70vh', sm: '85vh', md: '80vh'}, width: {xs: '100%', md: '80%'} }}>
-                 { isEdit? <CourseForm submitFn={() => setEdit(false)}/> : <DataGrid columns={columns} rows={courses}/>}
+                 { isEdit? <CourseForm submitFn={
+                    (course) => {setEdit(false);
+                    dispatch(updateCourse(course))}}
+                    courseUpdate = {updatedCourse.current}/> : <DataGrid columns={columns} rows={courses}/>}
             </Paper>
     </Box>
 }
