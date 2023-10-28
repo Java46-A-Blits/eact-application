@@ -3,11 +3,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { StateType } from "../../redux/store";
 import { Course } from "../../models/Course";
 import { GridColDef, DataGrid, GridRowParams, GridActionsCellItem, } from '@mui/x-data-grid'
-import { Box, Paper } from "@mui/material";
+import { Box, List, ListItem, Modal, Paper } from "@mui/material";
 import { removeCourse, updateCourse } from "../../redux/actions";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import CourseForm from "../forms/CourseForm";
+import ConfirmationData from "../../models/ConfirmationData";
+import ActionConfirmation from "../dialogs/ActionConfirmation";
 
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 function getAActions(actionsFn: (params: GridRowParams) => JSX.Element[]): GridColDef[] {
     const columns: GridColDef[] = [
         { field: "name", type: "string", headerName: "Course Name", align: "center", headerAlign: "center", flex: 1 },
@@ -23,18 +36,39 @@ const Courses: React.FC = () => {
     const dispatch = useDispatch();
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const [isEdit, setEdit] = React.useState(false);
+    const [flOpen, setFlOpen] = React.useState<boolean>(false);
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
     const updatedCourse = React.useRef<Course>();
+    const confirmationData  = React.useRef<ConfirmationData>({title:'', content:'', confirmHandler:()=>{}});
+    const shownCourse = React.useRef<Course>();
 
     function actionsFn(params: GridRowParams): JSX.Element[]{
         const actionElements: JSX.Element[] = [
-            <GridActionsCellItem label="Remove" onClick={() => dispatch(removeCourse(params.id as number))}icon={<Delete/>}/>,
-            <GridActionsCellItem label='Edit' onClick={() => editFn(params.id as number)} icon={<Edit/>}/>
+            <GridActionsCellItem label="Remove" onClick={() => ShowRemoveConfirmation(params.id as number)} icon={<Delete/>}/>,
+            <GridActionsCellItem label='Edit' onClick={() => editFn(params.id as number)} icon={<Edit/>}/>,
+            <GridActionsCellItem label='Details' onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility/>}/>
         ]
-        return actionElements
+        return actionElements;
     }
     function editFn(id: number){
         updatedCourse.current = courses.find(c => c.id === id);
         setEdit(true);        
+    }
+    function ShowRemoveConfirmation(id: number){
+        confirmationData.current.confirmHandler = removeAction.bind(undefined, id);
+        confirmationData.current.content = `You are going to remove course with id ${id}`;
+        confirmationData.current.title = 'Remove course confirmation';
+        setFlOpen(true);
+    }
+    function removeAction(id: number, flConfirm: boolean){
+        if (flConfirm) {
+            dispatch(removeCourse(id));
+        }
+        setFlOpen(false);
+    }
+    function showDetails(id: number){
+        shownCourse.current = courses.find(c => c.id === id);
+        setModalOpen(true);
     }
     const getActionsCallback = useCallback(getAActions, [courses]);
     const columns = getActionsCallback(actionsFn);
@@ -45,6 +79,20 @@ const Courses: React.FC = () => {
                     dispatch(updateCourse(course))}}
                     courseUpdate = {updatedCourse.current}/> : <DataGrid columns={columns} rows={courses}/>}
             </Paper>
+            <ActionConfirmation open={flOpen} title={confirmationData.current.title} 
+            content={confirmationData.current.content} confirmHandler={confirmationData.current.confirmHandler} />
+     <Modal
+        open={modalOpen}
+        onClose={()=>setModalOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <List>
+              {shownCourse.current && Object.entries(shownCourse.current as any).map(e => <ListItem key={e[0]}>{`${e[0]}: ${e[1]}`}</ListItem>)}
+          </List>
+        </Box>
+      </Modal>
     </Box>
 }
 export default Courses ;
