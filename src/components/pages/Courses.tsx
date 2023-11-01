@@ -9,28 +9,31 @@ import { Delete, Edit, Visibility } from "@mui/icons-material";
 import CourseForm from "../forms/CourseForm";
 import ConfirmationData from "../../models/ConfirmationData";
 import ActionConfirmation from "../dialogs/ActionConfirmation";
+import useLayout from "../../util/useLayouts";
+import courseData from "../../config/courseData.json";
 
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 300,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
   };
-function getAActions(actionsFn: (params: GridRowParams) => JSX.Element[]): GridColDef[] {
+function getAActions(actionsFn: (params: GridRowParams) => JSX.Element[], layout: string): GridColDef[] {
     const columns: GridColDef[] = [
+        { field: "id", type: "string", headerName: "ID", align: "center", headerAlign: "center", flex: 0.5},
         { field: "name", type: "string", headerName: "Course Name", align: "center", headerAlign: "center", flex: 1 },
         { field: "lecturer", type: "string", headerName: "Lecturer", align: "center", headerAlign: "center", flex:0.7 },
         { field: "hours", type: "number", headerName: "Hours", align: "right", headerAlign: "center", flex:0.5},
         { field: "cost", type: "number", headerName: "Cost", align: "right", headerAlign: "center", flex:0.5 },
         { field: "openingDate", type: "date", headerName: "Date", align: "center", headerAlign: "center", flex:0.5 },
-        {field: "actions", type:"actions", flex:0.5, getActions: actionsFn }
+        { field: "actions", type:"actions", flex:0.5, getActions: actionsFn }
     ]
-    return columns;
+    return columns.filter(c => (courseData as any)[layout].includes(c.field));
 }
 const Courses: React.FC = () => {
     const dispatch = useDispatch();
@@ -41,20 +44,37 @@ const Courses: React.FC = () => {
     const updatedCourse = React.useRef<Course>();
     const confirmationData  = React.useRef<ConfirmationData>({title:'', content:'', confirmHandler:()=>{}});
     const shownCourse = React.useRef<Course>();
+    const layout = useLayout();
+
 
     function actionsFn(params: GridRowParams): JSX.Element[]{
         const actionElements: JSX.Element[] = [
-            <GridActionsCellItem label="Remove" onClick={() => ShowRemoveConfirmation(params.id as number)} icon={<Delete/>}/>,
+            <GridActionsCellItem label="Remove" onClick={() => showRemoveConfirmation(params.id as number)} icon={<Delete/>}/>,
             <GridActionsCellItem label='Edit' onClick={() => editFn(params.id as number)} icon={<Edit/>}/>,
             <GridActionsCellItem label='Details' onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility/>}/>
         ]
         return actionElements;
     }
     function editFn(id: number){
-        updatedCourse.current = courses.find(c => c.id === id);
+        updatedCourse.current = courses.find(c => c.id === id); 
         setEdit(true);        
     }
-    function ShowRemoveConfirmation(id: number){
+    function showUpdateConfirmation(course: Course){
+        if (isUpdated(courses, course)){
+            confirmationData.current.confirmHandler = updateAction.bind(undefined, course);
+            confirmationData.current.content = `You are going to update course with id ${course.id}`;
+            confirmationData.current.title = 'Update course confirmation';
+            setFlOpen(true);
+        }
+        setEdit(false);
+    } 
+    function updateAction(course: Course, flConfirm: boolean): void {
+        if (flConfirm) {
+            dispatch(updateCourse(course));
+        }
+        setFlOpen(false);        
+    }
+    function showRemoveConfirmation(id: number){
         confirmationData.current.confirmHandler = removeAction.bind(undefined, id);
         confirmationData.current.content = `You are going to remove course with id ${id}`;
         confirmationData.current.title = 'Remove course confirmation';
@@ -70,13 +90,11 @@ const Courses: React.FC = () => {
         shownCourse.current = courses.find(c => c.id === id);
         setModalOpen(true);
     }
-    const getActionsCallback = useCallback(getAActions, [courses]);
-    const columns = getActionsCallback(actionsFn);
+    const getActionsCallback = useCallback(getAActions, [courses, layout]);
+    const columns = getActionsCallback(actionsFn, layout);
     return <Box sx = {{display: 'flex', justifyContent: 'center'}} >
             <Paper sx={{ height: {xs: '70vh', sm: '85vh', md: '80vh'}, width: {xs: '100%', md: '80%'} }}>
-                 { isEdit? <CourseForm submitFn={
-                    (course) => {setEdit(false);
-                    dispatch(updateCourse(course))}}
+                 { isEdit? <CourseForm submitFn={showUpdateConfirmation}
                     courseUpdate = {updatedCourse.current}/> : <DataGrid columns={columns} rows={courses}/>}
             </Paper>
             <ActionConfirmation open={flOpen} title={confirmationData.current.title} 
@@ -96,3 +114,10 @@ const Courses: React.FC = () => {
     </Box>
 }
 export default Courses ;
+function isUpdated (courses: Course[], newCourse: Course): boolean {
+    const courseOld = courses.find(c => c.id === newCourse.id);
+    const courseOldJson = JSON.stringify(courseOld);
+    const courseNewJson = JSON.stringify(newCourse);
+    return !!courseOld && courseOldJson !== courseNewJson;
+}
+

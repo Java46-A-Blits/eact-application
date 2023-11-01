@@ -14,7 +14,6 @@ const CourseForm: React.FC<Props> = ({submitFn, courseUpdate}) => {
 
     function onSubmit(event: any){
         event.preventDefault();
-        console.log(course);
         submitFn(course);
         document.querySelector('form')!.reset(); // to reset all the fields after 'submit'
         // '!' - means to assure form is an HTML element, '?' means may form may be NULL 
@@ -129,7 +128,7 @@ return<Box>
             </Grid>
         </Grid>
 
-    </Grid>
+    </Grid> 
     </form>
     </Box>
 }
