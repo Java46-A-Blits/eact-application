@@ -23,7 +23,7 @@ const ActionConfirmation: React.FC<Props> = ({open, title, content, confirmHandl
         </DialogContent>
         <DialogActions>
             <Button onClick={() => confirmHandler(false)}> Cancel </Button>
-            <Button onClick={() => confirmHandler(true)} autoFocus> OK </Button>
+            <Button onClick={() => confirmHandler(true)} autoFocus> OK </Button> 
         </DialogActions>
     </Dialog>
 }
