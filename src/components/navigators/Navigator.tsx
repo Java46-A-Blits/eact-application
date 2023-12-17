@@ -11,7 +11,7 @@ const Navigator: React.FC<{items: RouteType[]}> = ({items}) => {
     return <Box sx={{marginTop: {
         xs: '10vh', sm: '10vw', md: '10vh'
     }}}>
-        {isLaptopOrDesktop ? <NavigatorDesktop items={ROUTES}/> : <NavigatorMobile items={ROUTES}/>}
+        {isLaptopOrDesktop ? <NavigatorDesktop items={items}/> : <NavigatorMobile items={items}/>}
     </Box>
 }  
 export default Navigator;  

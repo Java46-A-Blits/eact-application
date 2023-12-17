@@ -3,4 +3,4 @@ type ConfirmationData = {
     content: string;
     confirmHandler: (flag: boolean) => void
 }
-export default ConfirmationData;
+export default ConfirmationData; 
