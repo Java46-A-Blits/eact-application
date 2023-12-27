@@ -11,6 +11,7 @@ import ConfirmationData from "../../models/ConfirmationData";
 import ActionConfirmation from "../dialogs/ActionConfirmation";
 import useLayout from "../../util/useLayouts";
 import courseData from "../../config/courseData.json";
+import { ClientData } from "../../models/ClientData";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -37,6 +38,7 @@ function getAActions(actionsFn: (params: GridRowParams) => JSX.Element[], layout
 }
 const Courses: React.FC = () => {
     const dispatch = useDispatch();
+    const clientData = useSelector<StateType, ClientData>(state => state.clientData);
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const [isEdit, setEdit] = React.useState(false);
     const [flOpen, setFlOpen] = React.useState<boolean>(false);
@@ -49,10 +51,13 @@ const Courses: React.FC = () => {
 
     function actionsFn(params: GridRowParams): JSX.Element[]{
         const actionElements: JSX.Element[] = [
-            <GridActionsCellItem label="Remove" onClick={() => showRemoveConfirmation(params.id as number)} icon={<Delete/>}/>,
-            <GridActionsCellItem label='Edit' onClick={() => editFn(params.id as number)} icon={<Edit/>}/>,
             <GridActionsCellItem label='Details' onClick={showDetails.bind(undefined, params.id as number)} icon={<Visibility/>}/>
         ]
+        if (clientData.isAdmin){
+            actionElements.push(  
+                <GridActionsCellItem label="Remove" onClick={() => showRemoveConfirmation(params.id as number)} icon={<Delete/>}/>,
+                <GridActionsCellItem label='Edit' onClick={() => editFn(params.id as number)} icon={<Edit/>}/>,)
+        }
         return actionElements;
     }
     function editFn(id: number){

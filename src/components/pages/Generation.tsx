@@ -5,6 +5,8 @@ import courseData from "../../config/courseData.json";
 import { range } from "../../util/functions";
 import { useDispatch } from "react-redux";
 import { addCourse } from "../../redux/actions";
+import { useNavigate } from "react-router-dom";
+import { COURSES_PATH } from "../../config/routes-config";
  
 const INPUT_GENERATION_ID = "input-generation-id";
 let inputElement: any;
@@ -14,9 +16,12 @@ const Generation: React.FC = () =>
     // Add an option to eneter a number of the courses to be randomly generated
     // and added to the courses array by using 'add' function of 'coursesService'
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     function onInput() {
        const nCourses: number = +inputElement.value;
-       range(0, nCourses).forEach(i => dispatch(addCourse(getRandomCourse(courseData))))
+       range(0, nCourses).forEach(i => dispatch(addCourse(getRandomCourse(courseData))));
+       navigate(COURSES_PATH);
+    
     }
     useEffect(() => {
         inputElement = document.getElementById(INPUT_GENERATION_ID);

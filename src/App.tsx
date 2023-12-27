@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { COURSES_PATH, ROUTES } from './config/routes-config';
+import { COURSES_PATH, LOGIN_PATH, ROUTES } from './config/routes-config';
 import { defaultMethod } from 'react-router-dom/dist/dom';
 import Navigator from './components/navigators/Navigator';
 import { useImitator } from './util/useImitator';
@@ -17,10 +17,10 @@ const App: React.FC = () => {
   const relevantItems: RouteType[] = React.useMemo<RouteType[]>(() => getRelevantItems(clientData), [clientData]);
   React.useEffect(() => setFlNavigate(false),[]);
   return <BrowserRouter>
-  {flNavigate && clientData.email && <Navigate to={COURSES_PATH}></Navigate> }{/* if it was not existing/*}
-  {/* we then were staying on the courses page even if refreshing the browser ! */}
+  
+  {/* if it was not existing we then were staying on the courses page even if refreshing the browser ! */}
     <Navigator items={relevantItems}/>
-
+    {flNavigate && (clientData.email ? <Navigate to={COURSES_PATH}></Navigate> : <Navigate to={LOGIN_PATH}></Navigate>)}
     <Routes>
       {getRoutes(relevantItems)}
     </Routes>
@@ -33,5 +33,6 @@ function getRoutes(relevantItems: RouteType[]): React.ReactNode {
 }
 function getRelevantItems(clientData: ClientData): RouteType[]{
   //TODO - FOR ADMIN
-  return ROUTES.filter(r => (!!clientData.email && r.authenticated) || (!clientData.email && !r.authenticated))
+  return ROUTES.filter(r => (!!clientData.email && r.authenticated) || (!clientData.email && !r.authenticated && !r.administrator) 
+  || (clientData.isAdmin && r.administrator))
 }

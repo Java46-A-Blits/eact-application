@@ -16,10 +16,10 @@ export const LOGOUT_PATH = '/logout';
 export const GENERATION_PATH = '/generation';
 export const ROUTES: RouteType[] = [
     {path: COURSES_PATH, label: 'Courses', element: <Courses/>, authenticated: true},
-    {path: ADD_COURSE_PATH, label: 'New Course', element:<AddCourse/>, authenticated: true},
+    {path: ADD_COURSE_PATH, label: 'New Course', element:<AddCourse/>, administrator: true},
     {path: STATISTIC_HOURS_PATH, label:'Stataistics Hours', element: <StatisticHours/>, authenticated: true},
     {path: STATISTIC_COST_PATH, label: 'Statistics Cost', element: <StatisticsCost/>, authenticated: true},
     {path: LOGIN_PATH, label: 'Login', element:<Login/>},
     {path: LOGOUT_PATH, label: 'Logout', element: <Logout/>, authenticated: true},
-    {path: GENERATION_PATH, label: 'Generation', element: <Generate/>, authenticated: true}    
+    {path: GENERATION_PATH, label: 'Generation', element: <Generate/>, administrator: true}    
 ]
