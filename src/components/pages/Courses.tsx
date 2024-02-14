@@ -37,7 +37,7 @@ function getAActions(actionsFn: (params: GridRowParams) => JSX.Element[], layout
     return columns.filter(c => (courseData as any)[layout].includes(c.field));
 }
 const Courses: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
     const clientData = useSelector<StateType, ClientData>(state => state.clientData);
     const courses: Course[] = useSelector<StateType, Course[]>(state => state.courses);
     const [isEdit, setEdit] = React.useState(false);

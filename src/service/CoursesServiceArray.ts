@@ -4,12 +4,12 @@ import CourcesService from "./CourcesService";
 
 export default class CoursesServiceArray implements CourcesService{
     courses: Course[] = [];
-    add(course: Course): void {
+    async add(course: Course): Promise<void> {
         const id = getRandomNumber(100000, 999000);
         course.id = id;
         this.courses.push(course);
     }
-    remove(id: number): void {
+    async remove(id: number): Promise<void> {
         const index = this.getIndex(id);
         this.courses.splice(index,1);
     }
@@ -20,14 +20,14 @@ export default class CoursesServiceArray implements CourcesService{
         }
         return index;
     }
-    update(id: number, course: Course): void {
+    async update(id: number, course: Course): Promise<void> {
         const index = this.getIndex(id);
         if (course.id !== id){
             throw `id ${id} doesn't match the course id ${course.id}` 
         }
         this.courses[index] = course;
     }
-    get(): Course[] {
+    async get(): Promise<Course[]> {
         return this.courses.slice();
     }
     

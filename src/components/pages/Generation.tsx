@@ -15,7 +15,7 @@ const Generation: React.FC = () =>
     // TODO:
     // Add an option to eneter a number of the courses to be randomly generated
     // and added to the courses array by using 'add' function of 'coursesService'
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
     const navigate = useNavigate();
     function onInput() {
        const nCourses: number = +inputElement.value;

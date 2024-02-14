@@ -9,7 +9,7 @@ const AddCourse: React.FC = () =>{
     // TODO:
     // add "Add course" button to add a random course using 'add' method 
     // of CoursesService (coursesService variable)
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
     function onSubmit(course: Course){
         dispatch(addCourse(course));
     }
